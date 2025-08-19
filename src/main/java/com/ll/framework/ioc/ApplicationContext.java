@@ -40,7 +40,11 @@ public class ApplicationContext {
             Constructor<?> constructor = clazz.getDeclaredConstructors()[0];
             constructor.setAccessible(true);
 
-            Object[] args = new Object[constructor.getParameterCount()];
+            Object[] args = new Object[constructor.getParameterTypes().length];
+            for (int i = 0; i < args.length; i++) {
+                String name = Introspector.decapitalize(constructor.getParameterTypes()[i].getSimpleName());
+                args[i] = genBean(name);
+            }
             Object instance = constructor.newInstance(args);
             beans.put(beanName, instance);
             return (T) instance;
