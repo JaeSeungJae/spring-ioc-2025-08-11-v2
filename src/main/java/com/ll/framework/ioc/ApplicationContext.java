@@ -1,5 +1,6 @@
 package com.ll.framework.ioc;
 
+import com.ll.framework.ioc.annotations.Repository;
 import com.ll.framework.ioc.annotations.Service;
 import org.reflections.Reflections;
 
@@ -20,6 +21,10 @@ public class ApplicationContext {
     public void init() {
         Reflections reflections = new Reflections(basePackage);
         for (Class<?> clazz : reflections.getTypesAnnotatedWith(Service.class)) {
+            String name = Introspector.decapitalize(clazz.getSimpleName());
+            providers.put(name, clazz);
+        }
+        for (Class<?> clazz : reflections.getTypesAnnotatedWith(Repository.class)) {
             String name = Introspector.decapitalize(clazz.getSimpleName());
             providers.put(name, clazz);
         }
